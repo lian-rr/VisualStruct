@@ -1,15 +1,16 @@
 abstract class Graphic {
+  
   private int mode;
   protected float[] params;
   Transform transform;
   Bounds bounds = new Bounds();
-  Graphic parent=null;
+  Graphic parent = null;
   Style style;
   Info info;
 
   void preDraw() {
     if (style!=null) {
-      pushStyle();
+      pushStyle();        
       style.draw();
     }
     if (transform!=null) {

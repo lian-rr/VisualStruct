@@ -1,33 +1,25 @@
-Layer layer;
-float factor = 1;
+View map;
   
 void setup() {
-  size(320, 280);
-  layer = new Layer();
+  size(640, 480);
+  map = new View(0,0,640,480);
+  Layer layer = new Layer();
+  layer.style = new Style(#FF0000,#00FF00,1);
+  map.addItem(layer);
   layer.loadBNA("cantones.bna");
-  layer.transform = new Transform();
-  zoom(1);
+  map.zoomToFullExtent();
 }
 
 void draw() {
-  background(255); // Processing function
-  layer.draw();
+  background(255);
+  System.reset();
+  map.draw();
 }
 
-void mouseWheel(MouseEvent event) {
-  float e = event.getCount();
-  if (e<0) 
-    factor *= 0.9;
-  else
-    factor *= 1.1;
-  zoom(factor);
+void keyPressed() {
+  map.keyPressed();
 }
 
-void zoom(float factor) {
-  layer.transform.reset();
-  layer.transform.translation(width/2,height/2);
-  layer.transform.scalation(factor,factor);
-  layer.transform.translation(-(layer.bounds.xMin+layer.bounds.width()/2), 
-                              -(layer.bounds.yMin+layer.bounds.height()/2));
-  layer.style.strokeWidth = 1/factor;
+void mouseDragged() {
+  map.translateCenter(pmouseX-mouseX,pmouseY-mouseY);
 }

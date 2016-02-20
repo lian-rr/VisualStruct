@@ -1,9 +1,5 @@
 class Layer extends Group {
   
-  Layer() {
-    style = new Style(0,255,1);
-  }
-  
   void loadBNA(String filename) {
     Shape shape = null;
     String lines[] = loadStrings(filename);
@@ -21,7 +17,7 @@ class Layer extends Group {
         n = abs(c);
         shape = new Shape();
         shape.info = new ShapeInfo(c);
-        add(shape);
+        addItem(shape);
       }
     }
   }

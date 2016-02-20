@@ -1,31 +1,33 @@
 class Style {
   
-  int strokeColor;
-  int fillColor;
+  color strokeColor;
+  color fillColor;
   float strokeWidth;
 
-  Style(int a) {
+  Style(color a) {
     strokeColor = a;
   }
 
-  Style(int a, int b) {
+  Style(color a, color b) {
     strokeColor = a; fillColor = b;
   }
 
-  Style(int a, int b, int c) {
+  Style(color a, color b, color c) {
     strokeColor = a; fillColor = b; strokeWidth = c;
   }
 
   void draw() {
-    if (strokeColor<0)
+    if (strokeColor==-1)
       noStroke();
     else 
       stroke(strokeColor);
-    if (fillColor<0)
+    if (fillColor==-1)
       noFill();
     else 
       fill(fillColor); 
-    if (strokeWidth>0)
-      strokeWeight(strokeWidth);
+    if (strokeWidth>0) {
+      System.strokeWidth *= strokeWidth;
+      strokeWeight(System.strokeWidth);
+    }
   }
 }

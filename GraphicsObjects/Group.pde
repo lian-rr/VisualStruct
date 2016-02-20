@@ -1,4 +1,5 @@
 class Group extends Graphic {
+
   private ArrayList children;
   Font font;
   
@@ -6,7 +7,7 @@ class Group extends Graphic {
     children = new ArrayList();
   }
   
-  void add(Graphic g) {
+  void addItem(Graphic g) {
     children.add(g);
     g.parent = this;
   }
