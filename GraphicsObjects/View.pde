@@ -17,6 +17,11 @@ class View extends Group {
     style = new Style(0,255,1);
   }
 
+  void draw() {
+    System.reset();
+    super.draw();
+  }
+  
   void pan(int direction, int offset) { 
     if (direction==UP) {
       extent.yMin -= offset/scale;
@@ -31,7 +36,7 @@ class View extends Group {
       extent.xMin += offset/scale; 
       extent.xMax += offset/scale;
     }
-    zoomToExtent(extent);
+    _zoom();
   }
 
   void zoomToFullExtent() {
@@ -48,7 +53,10 @@ class View extends Group {
     scale = min(dimensions.width()/extent.width(), dimensions.height()/extent.height());
     xCenter=dimensions.width()/2; 
     yCenter=dimensions.height()/2;
+    _zoom();
+  }
     
+  void _zoom() {
     transform.reset();
     transform.translation(xCenter,yCenter);
     transform.scalation((float)scale,(float)scale);
@@ -58,23 +66,8 @@ class View extends Group {
   }
 
   void zoomToScale(float scl) { 
-    scale = scl;
-  }
-
-  void zoomOut(int offset) {
-    extent.xMin -= offset/scale;
-    extent.xMax += offset/scale;
-    extent.yMin -= offset/scale;
-    extent.yMax += offset/scale;
-    zoomToExtent(extent);
-  }
-
-  void zoomIn(int offset) { 
-    extent.xMin += offset/scale;
-    extent.xMax -= offset/scale;
-    extent.yMin += offset/scale;
-    extent.yMax -= offset/scale;
-    zoomToExtent(extent);
+    scale *= scl;
+    _zoom();
   }
 
   void translateCenter(float x, float y) {
@@ -82,14 +75,14 @@ class View extends Group {
     extent.xMax += x/scale;
     extent.yMin -= y/scale; 
     extent.yMax -= y/scale;
-    zoomToExtent(extent);
+    _zoom();
   }
 
   void keyPressed() {
     if (keyCode == TAB)
-      zoomIn(10);
+      zoomToScale(0.9);
     if (keyCode == BACKSPACE)
-      zoomOut(10);
+      zoomToScale(1.1);
     if (keyCode == UP)
       pan(UP, 10);
     else if (keyCode == DOWN)

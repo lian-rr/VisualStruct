@@ -12,7 +12,6 @@ void setup() {
 
 void draw() {
   background(255);
-  System.reset();
   map.draw();
 }
 
@@ -22,4 +21,12 @@ void keyPressed() {
 
 void mouseDragged() {
   map.translateCenter(pmouseX-mouseX,pmouseY-mouseY);
+}
+
+void mouseWheel(MouseEvent event) {
+  float e = event.getCount();
+  if (e<0) 
+    map.zoomToScale(0.9);
+  else
+    map.zoomToScale(1.1);
 }
