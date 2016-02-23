@@ -1,12 +1,12 @@
 abstract class Graphic {
   
-  private int mode;
-  protected float[] params;
   Transform transform;
-  Bounds bounds = new Bounds();
-  Graphic parent = null;
+  Bounds bounds;
+  Graphic parent;
   Style style;
   Info info;
+  
+  boolean visible = true;
 
   void preDraw() {
     if (style!=null) {
@@ -28,9 +28,20 @@ abstract class Graphic {
       popMatrix();
   }
   
-  void updateBounds(float x, float y) {
-    bounds.include(x, y);
-    if (parent!=null)
-      parent.updateBounds(x,y);
+  boolean contains(float x, float y) {
+    return (bounds.contains(x,y));
+  }
+  
+  void execute(Callback call) {
+    call.run(this);
+  }
+  
+  void updateBounds(Bounds b) {
+   if (bounds==null)
+      bounds = new Bounds(b);
+   else
+      bounds.union(b);
+   if (parent!=null)
+      parent.updateBounds(b);
   }
 }

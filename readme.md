@@ -1,4 +1,4 @@
-# Graphics Objects Library
+# Visual Structures Library
 
-A Processing library for working with graphical objects. It provides a unified API for working with vector graphics (rectangles, shapes, and text) and images.
+A Processing library for working with visual objects. It provides a unified API for working with vector graphics (rectangles, shapes, and text) and images.
 

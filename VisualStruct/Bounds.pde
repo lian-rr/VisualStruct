@@ -1,16 +1,18 @@
 class Bounds {
-  float xMin = MAX_FLOAT;
-  float yMin = MAX_FLOAT;
-  float xMax = MIN_FLOAT;
-  float yMax = MIN_FLOAT;
-  
-  Bounds() {
-  }
+  float xMin, yMin, xMax, yMax;
   
   Bounds(float a, float b, float c, float d) {
     xMin = a; yMin = b; xMax = c; yMax = d;
   }
+  
+  Bounds(Bounds b) {
+    xMin = b.xMin; yMin = b.yMin; xMax = b.xMax; yMax = b.yMax;
+  }
 
+  void print() {
+    println(xMin+" "+yMin+" "+xMax+" "+yMax);
+  }
+  
   float width() { return xMax-xMin; }
   
   float height() { return yMax-yMin; }
@@ -25,5 +27,9 @@ class Bounds {
   void union(Bounds b) {
     include(b.xMin,b.yMin);
     include(b.xMax,b.yMax);
+  }
+  
+  boolean contains(float x, float y) {
+    return (xMin<x)&&(x<xMax)&&(yMin<y)&&(y<yMax);
   }
 }
