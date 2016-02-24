@@ -12,8 +12,7 @@ class RectAxis extends Group {
   int tickInc = 20;
   int tickLen = 10;
 
-  int tickWidth = 1;
-  int tickColor = 0;
+  Style tickStyle;
 
   boolean tickEnable = true;
   boolean labelEnable = true;
@@ -54,9 +53,6 @@ class RectAxis extends Group {
 
   void makeTicksNum() {
 
-    //ticks = new Group();
-    ticks.style = new Style(tickColor, 0, tickWidth);
-
     int axisMode = 1;
     if (position == LEFT)
       axisMode = -1;
@@ -71,8 +67,6 @@ class RectAxis extends Group {
   }
 
   void makeTicksCat() {
-    //ticks = new Group();
-    ticks.style = new Style(tickColor, 0, tickWidth);
 
     int axisMode = 1;
     if (position == LEFT)
@@ -90,7 +84,6 @@ class RectAxis extends Group {
 
   void makeLabelsNum() {
 
-    //labels = new Group();
     labels.font = new Font(labelSize, null);
     labels.style = new Style(0, labelColor, 1);
 
@@ -107,7 +100,6 @@ class RectAxis extends Group {
 
   void makeLabelsCat() {
 
-    //labels = new Group();
     labels.font = new Font(labelSize, null);
     labels.style = new Style(0, labelColor, 1);
 

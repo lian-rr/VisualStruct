@@ -8,10 +8,6 @@ class Bounds {
   Bounds(Bounds b) {
     xMin = b.xMin; yMin = b.yMin; xMax = b.xMax; yMax = b.yMax;
   }
-
-  void print() {
-    println(xMin+" "+yMin+" "+xMax+" "+yMax);
-  }
   
   float width() { return xMax-xMin; }
   

@@ -5,7 +5,7 @@ class Text extends Shape {
 
   Text(String _str, float a, float b) {
     params = new float[] {a,b};
-    bounds = new Bounds(a,b,a+10,b+20);
+    bounds = new Bounds(a,b-20,a+20,b+20);
     maxVertex = countVertex = params.length/2;
     str = _str;
   }

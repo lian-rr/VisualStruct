@@ -3,7 +3,7 @@ abstract class Shape extends Graphic {
   protected float[] params;
   protected int maxVertex = 20;
   protected int countVertex = 0;
-  protected int mode = CLOSE;
+  protected int modeShape = CLOSE;
 
   void draw() {
     if (!visible) return;
@@ -11,8 +11,18 @@ abstract class Shape extends Graphic {
     beginShape();
     for (int i=0; i<countVertex; i++)
       vertex(params[i*2], height-params[i*2+1]);
-    endShape(mode);
+    endShape(modeShape);
     postDraw();
+  }
+
+
+  void updateBounds() {
+    for (int i=0; i<countVertex; i++) {
+      if (bounds==null)
+        bounds = new Bounds(params[i], params[i*2], params[i], params[i*2]);
+      else
+        bounds.include(params[i], params[i*2]);
+    }
   }
 
   boolean contains(float x, float y) {

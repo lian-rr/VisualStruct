@@ -1,11 +1,11 @@
 abstract class Graphic {
-  
+
   Transform transform;
   Bounds bounds;
   Graphic parent;
   Style style;
   Info info;
-  
+
   boolean visible = true;
 
   void preDraw() {
@@ -18,30 +18,30 @@ abstract class Graphic {
       transform.draw();
     }
   }
-  
+
   abstract void draw();
-  
+
   void postDraw() {
     if (style!=null)
       popStyle();
     if (transform!=null)
       popMatrix();
   }
-  
+
   boolean contains(float x, float y) {
-    return (bounds.contains(x,y));
+    return (bounds.contains(x, y));
   }
-  
+
   void execute(Callback call) {
     call.run(this);
   }
-  
+
   void updateBounds(Bounds b) {
-   if (bounds==null)
+    if (bounds==null)
       bounds = new Bounds(b);
-   else
+    else
       bounds.union(b);
-   if (parent!=null)
+    if (parent!=null)
       parent.updateBounds(b);
   }
 }

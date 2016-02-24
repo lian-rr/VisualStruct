@@ -1,5 +1,7 @@
 class Style {
   
+  static final int NONE = -1;
+  
   color strokeColor;
   color fillColor;
   float strokeWidth;
@@ -12,16 +14,16 @@ class Style {
     strokeColor = a; fillColor = b;
   }
 
-  Style(color a, color b, color c) {
+  Style(color a, color b, int c) {
     strokeColor = a; fillColor = b; strokeWidth = c;
   }
 
   void draw() {
-    if (strokeColor==-1)
+    if (strokeColor==NONE)
       noStroke();
     else 
       stroke(strokeColor);
-    if (fillColor==-1)
+    if (fillColor==NONE)
       noFill();
     else 
       fill(fillColor); 

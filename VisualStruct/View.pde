@@ -4,6 +4,7 @@ class View extends Group {
   Bounds dimensions;
   float scale = 1;
   float xCenter=0 , yCenter=0;
+  //Object Processing;
 
   View(float a, float b, float c, float d) {
     dimensions = new Bounds(a, b, a+c, b+d);
@@ -19,7 +20,8 @@ class View extends Group {
   void draw() {
     System.reset();
     rect(dimensions.xMin-1, dimensions.yMin-1, dimensions.width()+1, dimensions.height()+1);
-    clip(dimensions.xMin, dimensions.yMin, dimensions.width(), dimensions.height());
+    Processing.instances[0].externals.context.clip();
+    //clip(dimensions.xMin, dimensions.yMin, dimensions.width(), dimensions.height());
     super.draw();
   }
 
@@ -60,21 +62,6 @@ class View extends Group {
     extent.yMin -= y/scale; 
     extent.yMax -= y/scale;
     _zoom();
-  }
-
-  void keyPressed(int keyCode) {
-    if (keyCode == TAB)
-      zoomToScale(0.9);
-    if (keyCode == BACKSPACE)
-      zoomToScale(1.1);
-    if (keyCode == UP)
-      translateCenter(0, 10);
-    else if (keyCode == DOWN)
-      translateCenter(0, -10);
-    else if (keyCode == RIGHT)
-      translateCenter(-10, 0);
-    else if (keyCode == LEFT)
-      translateCenter(10, 0);
   }
 
   void pick(float x, float y, Callback call) {
