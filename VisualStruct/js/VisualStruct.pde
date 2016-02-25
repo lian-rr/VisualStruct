@@ -1,3 +1,5 @@
+// VisualStruct Library
+
 class Arc extends Shape {
   
   static final int PIE;
