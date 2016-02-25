@@ -1,4 +1,7 @@
-// VisualStruct Library
+/*
+height: 240
+license: Released under the GNU General Public License, version 3.
+*/
 
 class Arc extends Shape {
   
