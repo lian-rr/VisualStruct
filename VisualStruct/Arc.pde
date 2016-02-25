@@ -1,7 +1,7 @@
 class Arc extends Shape {
   
-  static final int PIE;
-  static final int CHORD;
+  //static final int PIE;
+  //static final int CHORD;
 
   Arc(float x, float y, float w, float h, float s, float e) {
     this(x, y, w, h, s, e, PIE);
@@ -34,6 +34,6 @@ class Arc extends Shape {
       modeShape = CLOSE;
     else
       modeShape = OPEN;
-    updateBounds();
+    createBounds();
   }
 }

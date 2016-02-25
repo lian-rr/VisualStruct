@@ -1,9 +1,7 @@
 class Layer extends Group {
   
-  private ArrayList shapes;
-  
   void loadBNA(String filename) {
-    Shape shape = null;
+    Polygon polygon = null;
     String lines[] = loadStrings(filename);
     float x, y;
     int n=0;
@@ -13,12 +11,12 @@ class Layer extends Group {
         x=float(list[0]);
         y=float(list[1]);
         n--;
-        //shape.addVertex(x, y);
+        polygon.addVertex(x, y);
       } else if (list[0].charAt(0)=='"') {
         int c = parseInt(list[list.length-1]);
         n = abs(c);
-        //shape = new Shape();
-        shapes.add(shape);
+        polygon = new Polygon();
+        addItem(polygon);
       }
     }
   }

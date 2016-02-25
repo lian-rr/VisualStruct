@@ -4,7 +4,6 @@ class View extends Group {
   Bounds dimensions;
   float scale = 1;
   float xCenter=0 , yCenter=0;
-  //Object Processing;
 
   View(float a, float b, float c, float d) {
     dimensions = new Bounds(a, b, a+c, b+d);
@@ -19,9 +18,9 @@ class View extends Group {
 
   void draw() {
     System.reset();
-    rect(dimensions.xMin-1, dimensions.yMin-1, dimensions.width()+1, dimensions.height()+1);
-    Processing.instances[0].externals.context.clip();
-    //clip(dimensions.xMin, dimensions.yMin, dimensions.width(), dimensions.height());
+    rect(dimensions.xMin-1, dimensions.yMin-1, dimensions.w()+1, dimensions.h()+1);
+    //Processing.instances[0].externals.context.clip();
+    clip(dimensions.xMin, dimensions.yMin, dimensions.w(), dimensions.h());
     super.draw();
   }
 
@@ -36,9 +35,9 @@ class View extends Group {
   }
 
   void _zoomToExtent() {
-    scale = min(dimensions.width()/extent.width(),dimensions.height()/extent.height());
-    xCenter=dimensions.width()/2+dimensions.xMin; 
-    yCenter=dimensions.height()/2+dimensions.yMin;
+    scale = min(dimensions.w()/extent.w(),dimensions.h()/extent.h());
+    xCenter=dimensions.w()/2+dimensions.xMin; 
+    yCenter=dimensions.h()/2+dimensions.yMin;
     _zoom();
   }
 
@@ -46,8 +45,8 @@ class View extends Group {
     transform.reset();
     transform.translation(xCenter, yCenter);
     transform.scalation((float)scale, (float)scale);
-    transform.translation(-(extent.xMin+extent.width()/2), 
-      -(extent.yMin+extent.height()/2));
+    transform.translation(-(extent.xMin+extent.w()/2), 
+      -(extent.yMin+extent.h()/2));
     style.strokeWidth = (1/scale);
   }
 
@@ -65,8 +64,8 @@ class View extends Group {
   }
 
   void pick(float x, float y, Callback call) {
-    System.xCoord = (x-xCenter)/scale+extent.xMin+extent.width()/2;
-    System.yCoord = (y-yCenter)/scale+extent.yMin+extent.height()/2;
+    System.xCoord = (x-xCenter)/scale+extent.xMin+extent.w()/2;
+    System.yCoord = (y-yCenter)/scale+extent.yMin+extent.h()/2;
     execute(call);
   }
 }

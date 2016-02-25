@@ -30,6 +30,6 @@ class Curve extends Shape {
     }
     
     countVertex = params.length/2;
-    updateBounds();
+    createBounds();
   }
 }

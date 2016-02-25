@@ -23,6 +23,6 @@ class Bezier extends Shape {
     }
 
     countVertex = params.length/2;
-    updateBounds();
+    createBounds();
   }
 }

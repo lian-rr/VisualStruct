@@ -37,6 +37,6 @@ class Ellipse extends Shape {
       params[t*2+1] = (float)(y);
     }
     countVertex = params.length/2;
-    updateBounds();
+    createBounds();
   }
 }

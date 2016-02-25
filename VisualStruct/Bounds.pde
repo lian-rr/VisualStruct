@@ -9,9 +9,9 @@ class Bounds {
     xMin = b.xMin; yMin = b.yMin; xMax = b.xMax; yMax = b.yMax;
   }
   
-  float width() { return xMax-xMin; }
+  float w() { return xMax-xMin; }
   
-  float height() { return yMax-yMin; }
+  float h() { return yMax-yMin; }
   
   void include(float x, float y) {
     if (x<xMin) xMin = x;

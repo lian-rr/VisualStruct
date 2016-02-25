@@ -15,14 +15,22 @@ abstract class Shape extends Graphic {
     postDraw();
   }
 
-
-  void updateBounds() {
+  void createBounds() {
     for (int i=0; i<countVertex; i++) {
       if (bounds==null)
         bounds = new Bounds(params[i], params[i*2], params[i], params[i*2]);
       else
         bounds.include(params[i], params[i*2]);
     }
+  }
+  
+  void expand(int n) {
+    maxVertex = n;
+    float[] temp = new float[maxVertex*2];
+    for (int i=0; i<countVertex*2; i++)
+      temp[i] = params[i];
+    // free(params);
+    params = temp;
   }
 
   boolean contains(float x, float y) {
