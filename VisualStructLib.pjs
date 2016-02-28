@@ -1,8 +1,3 @@
-/*
-height: 350
-license: gpl-3.0
-*/
-
 /* Visual Structure Library */
 /* Copyright (c) 2016 Armando Arce, GPL3 */
 
@@ -15,6 +10,11 @@ abstract class Graphic {
   Info info = null;
 
   boolean visible = true;
+  
+  Graphic setStyle(Style s) {
+    style = s;
+    return this;
+  }
 
   void preDraw() {
     if (style!=null) {
@@ -74,20 +74,24 @@ class Transform {
     trans = new ArrayList();
   }
   
-  void translation(float x, float y) {
+  Transform translation(float x, float y) {
     trans.add(new Method(TRANSLATE,x,y));
+    return this;
   }
   
-  void scalation(float x, float y) {
+  Transform scalation(float x, float y) {
     trans.add(new Method(SCALE,x,y));
+    return this;
   }
   
-  void rotation(float x) {
+  Transform rotation(float x) {
     trans.add(new Method(ROTATE,x,0));
+    return this;
   }
   
-  void reset() {
+  Transform reset() {
     trans.clear();
+    return this;
   }
   
   void draw() {
@@ -110,6 +114,10 @@ class Transform {
       }
     }
   }
+}
+
+Transform newTransform() {
+  return new Transform();
 }
 
 class Bounds {
@@ -151,17 +159,26 @@ class Style {
   color strokeColor;
   color fillColor;
   float strokeWidth;
-
-  Style(color a) {
-    strokeColor = a;
-  }
-
-  Style(color a, color b) {
-    strokeColor = a; fillColor = b;
-  }
+  
+  Style() {}
 
   Style(color a, color b, int c) {
     strokeColor = a; fillColor = b; strokeWidth = c;
+  }
+  
+  Style setStroke(color a) {
+    strokeColor = a;
+    return this;
+  }
+  
+  Style setFill(color a) {
+    fillColor = a;
+    return this;
+  }
+  
+  Style setStrokeWidth(int a) {
+    strokeWidth = a;
+    return this;
   }
 
   void draw() {
@@ -178,6 +195,10 @@ class Style {
       strokeWeight(System.strokeWidth);
     }
   }
+}
+
+Style newStyle() {
+  return new Style();
 }
 
 static class System {
@@ -203,7 +224,12 @@ class Group extends Graphic {
     children = new ArrayList();
   }
   
-  void addItem(Graphic g) {
+  Group setStyle(Style s) {
+    super.setStyle(s);
+    return this;
+  }
+  
+  Group addItem(Graphic g) {
     children.add(g);
     g.parent = this;
     if (g.bounds!=null) {
@@ -212,10 +238,12 @@ class Group extends Graphic {
       else
         updateBounds(g.bounds);
     }
+    return this;
   }
   
-  void empty() {
+  Group empty() {
     children.clear();
+    return this;
   }
   
   void draw() {
@@ -235,19 +263,31 @@ class Group extends Graphic {
   }
 }
 
+Group newGroup() {
+  return new Group();
+}
+
 class Font {
   
   private PFont font; 
   private String fontFamily;
   int fontSize;
   
-  Font(int a) {
-    fontSize = a;
-  }
+  Font() {}
   
   Font(int a, String b) {
     fontSize = a;
     fontFamily = b;
+  }
+  
+  Font setSize(int s) {
+    fontSize = s;
+    return this;
+  }
+  
+  Font setFamily(String f) {
+    fontFamily = f;
+    return this;
   }
   
   void draw() {
@@ -259,16 +299,22 @@ class Font {
   }
 }
 
+Font newFont() {
+  return new Font();
+}
+
 abstract class Shape extends Graphic {
 
   protected float[] params;
   protected int maxVertex = 20;
   protected int countVertex = 0;
   protected int modeShape = CLOSE;
+  protected int joinShape = MITER;
 
   void draw() {
     if (!visible) return;
     preDraw();
+    strokeJoin(joinShape);
     beginShape();
     for (int i=0; i<countVertex; i++)
       vertex(params[i*2], height-params[i*2+1]);
@@ -373,11 +419,16 @@ class View extends Group {
     style = new Style(0, 255, 1);
   }
 
+  View addItem(Graphic g) {
+    super.addItem(g);
+    return this;
+  }
+  
   void draw() {
     System.reset();
     rect(dimensions.xMin-1, dimensions.yMin-1, dimensions.w()+1, dimensions.h()+1);
-    Processing.instances[0].externals.context.clip();
-    //clip(dimensions.xMin, dimensions.yMin, dimensions.w(), dimensions.h());
+    Processing.instances[0].externals.context.clip(); // Processingjs
+    //clip(dimensions.xMin, dimensions.yMin, dimensions.w(), dimensions.h()); // Processing
     super.draw();
   }
 
@@ -430,6 +481,10 @@ class View extends Group {
   }
 }
 
+View newView(float a, float b, float c, float d) {
+  return new View(a,b,c,d);
+}
+
 class Callback {
 
   void run(Graphic g) {
@@ -451,6 +506,7 @@ class Arc extends Shape {
   }
     
   Arc(float cx, float cy, float w, float h, float start, float end, int mode, int n) {
+    joinShape = ROUND;
     params = new float[n*2];
     int parts = n;
     float part = 2.0f * 3.1415926f / parts;
@@ -477,6 +533,10 @@ class Arc extends Shape {
   }
 }
 
+Arc newArc(float x, float y, float w, float h, float s, float e) {
+  return newArc(x,y,w,h,s,e);
+}
+
 class Bezier extends Shape {
 
   Bezier(float x1, float y1, float x2, float y2, 
@@ -487,6 +547,7 @@ class Bezier extends Shape {
   Bezier(float x1, float y1, float x2, float y2, 
     float x3, float y3, float x4, float y4, int n) {
     modeShape = OPEN;
+    joinShape = ROUND;
     params = new float[(n+1)*2];
 
     for (int i=0; i <= n; ++i) {
@@ -506,6 +567,11 @@ class Bezier extends Shape {
   }
 }
 
+Bezier newBezier(float x0, float y0, float x1, float y1, 
+    float x2, float y2, float x3, float y3) {
+  return new Bezier(x0,y0,x1,y1,x2,y2,x3,y3);
+}
+
 class Curve extends Shape {
   
   Curve(float x0, float y0, float x1, float y1, 
@@ -516,6 +582,7 @@ class Curve extends Shape {
   Curve(float x0, float y0, float x1, float y1, 
     float x2, float y2, float x3, float y3, int n) {
     modeShape = OPEN;
+    joinShape = ROUND;
     params = new float [(n+1)*2];
 
     double aX = (2.0f * x1);
@@ -540,6 +607,11 @@ class Curve extends Shape {
     countVertex = params.length/2;
     createBounds();
   }
+}
+
+Curve newCurve(float x0, float y0, float x1, float y1, 
+    float x2, float y2, float x3, float y3) {
+  return new Curve(x0,y0,x1,y1,x2,y2,x3,y3);
 }
 
 class Ellipse extends Shape {
@@ -570,6 +642,7 @@ class Ellipse extends Shape {
   }
 
   void _Ellipse(float cx, float cy, float w, float h, int n) {
+    joinShape = ROUND;
     params = new float[n*2];
     int parts = n;
     int t;
@@ -585,13 +658,8 @@ class Ellipse extends Shape {
   }
 }
 
-class Line extends Shape {
-
-  Line(float a, float b, float c, float d) {
-    params = new float[] {a,b,c,d};
-    bounds = new Bounds(a,b,c,d);
-    maxVertex = countVertex = params.length/2;
-  }
+Ellipse newEllipse(float x, float y, float a, float b) {
+  return new Ellipse(x,y,a,b);
 }
 
 class Path extends Shape {
@@ -600,7 +668,7 @@ class Path extends Shape {
     params = new float[maxVertex*2];
   }
   
-  void addPart(Shape seg) {
+  Path addPart(Shape seg) {
     if (countVertex+seg.countVertex>maxVertex)
       expand(countVertex+seg.countVertex);
     for (int i=0; i<seg.countVertex*2;i++)
@@ -608,20 +676,64 @@ class Path extends Shape {
       
     countVertex += seg.countVertex;
     createBounds();
+    return this;
   }
 }
 
-class Polygon extends Shape {
+Path newPath() {
+  return newPath();
+}
 
-  Polygon() {
-    params = new float[maxVertex*2];
+class Line extends Shape {
+
+  Line(float a, float b, float c, float d) {
+    params = new float[] {a,b,c,d};
+    maxVertex = countVertex = params.length/2;
+    createBounds();
   }
+}
+
+Line newLine(float a, float b, float c, float d) {
+  return newLine(a,b,c,d);
+}
+
+class Triangle extends Shape {
+
+  Triangle(float a, float b, float c, float d, float e, float f) {
+      params = new float[] {a,b,c,d,e,f};
+      maxVertex = countVertex = params.length/2;
+      createBounds();
+    }
+}
+
+Triangle newTriangle(float a, float b, float c, float d, float e, float f) {
+  return new Triangle(a,b,c,d,e,f);
+}
+
+class Quad extends Shape {
+
+  Quad(float a, float b, float c, float d, float e, float f, float g, float h) {
+      params = new float[] {a,b,c,d,e,f,g,h};
+      maxVertex = countVertex = params.length/2;
+      createBounds();
+    }
+}
+
+Quad newQuad(float a, float b, float c, float d, float e, float f, float g, float h) {
+  return new Quad(a,b,c,d,e,f,g,h);
+}
+
+class Polygon extends Shape {
   
   Polygon(float[] a) {
     params = a;
     maxVertex = countVertex = params.length/2;
     createBounds();
   }
+}
+
+Polygon newPolygon(float[] a) {
+  return newPolygon(a);
 }
 
 class Rect extends Shape {
@@ -654,16 +766,20 @@ class Rect extends Shape {
   }
 }
 
+Rect newRect(float x, float y, float a, float b) {
+  return new Rect(x,y,a,b);
+}
+
 class Text extends Shape {
 
   String str;
   Font font;
 
-  Text(String _str, float a, float b) {
+  Text(String s, float a, float b) {
     params = new float[] {a,b};
     bounds = new Bounds(a,b-20,a+20,b+20);
     maxVertex = countVertex = params.length/2;
-    str = _str;
+    str = s;
   }
   
   void draw() {
@@ -675,6 +791,10 @@ class Text extends Shape {
   }
 }
 
+Text newText(String s, float a, float b) {
+  return new Text(s,a,b);
+}
+
 class RoundedRect extends Path {
 
   RoundedRect(float x, float y, float w, float h, float r) {
@@ -682,6 +802,7 @@ class RoundedRect extends Path {
   }
   
   RoundedRect(float x, float y, float w, float h, float r1, float r2) {
+     joinShape = ROUND;
      addPart(new Arc(x+w-r1/2, y+h-r2/2, r1, r2, 0, HALF_PI,OPEN));
      addPart(new Line(x+w-r1,y+h,x+r1,y+h));
      addPart(new Arc(x+r1/2, y+h-r2/2, r1, r2, HALF_PI,PI,OPEN));
@@ -690,4 +811,8 @@ class RoundedRect extends Path {
      addPart(new Line(x+r1/2,y,x+w-r1/2,y));
      addPart(new Arc(x+w-r1/2, y+r2/2, r1, r2, PI+HALF_PI, TWO_PI, OPEN));
   }
+}
+
+RoundedRect newRoundedRect(float x, float y, float w, float h, float r) {
+  return new RoundedRect(x,y,w,h,r);
 }
