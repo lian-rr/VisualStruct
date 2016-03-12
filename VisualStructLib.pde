@@ -99,10 +99,10 @@ abstract class Graphic {
       popMatrix();
   }
 
-  void pick(float x,float y,Command ok,Command ko) {};
+  void click(float x,float y,Action act) {};
 }
 
-abstract class Command {
+abstract class Action {
   abstract void run(Graphic g);
 }
 
@@ -236,7 +236,7 @@ class Group extends Graphic {
 
   private ArrayList children;
   private Font font;
-  private Symbol symbol;
+  private Symbol _symbol;
   
   Group() {
     children = new ArrayList();
@@ -301,16 +301,16 @@ class Group extends Graphic {
   }
   
   Group symbol(float[] v) {
-    if (symbol==null)
-      symbol = newSymbol();
-    symbol.vertices = v;
+    if (_symbol==null)
+      _symbol = newSymbol();
+    _symbol.vertices = v;
     return this;
   }
   
   Group symbolMode(int m) {
-    if (symbol==null)
-      symbol = newSymbol();
-    symbol.mode = m;
+    if (_symbol==null)
+      _symbol = newSymbol();
+    _symbol.mode = m;
     return this;
   }
   
@@ -333,9 +333,9 @@ class Group extends Graphic {
     return this;
   }
   
-  void pick(float x, float y, Command ok, Command ko) {
+  void click(float x, float y, Action act) {
     for (int i=0; i<len();i++)
-      ((Graphic)get(i)).pick(x,y,ok,ko);
+      ((Graphic)get(i)).click(x,y,act);
   }
   
   void draw() {
@@ -343,16 +343,16 @@ class Group extends Graphic {
     if (System.symbol==null)
       System.symbol = newSymbol();
     Symbol temp=null;
-    if (symbol!=null) {
+    if (_symbol!=null) {
       temp = System.symbol;
-      System.symbol=symbol;
+      System.symbol=_symbol;
     }
     preDraw();
     if (font!=null)
       font.draw();
     for (int i=0; i<children.size();i++)
       ((Graphic)children.get(i)).draw();
-    if (symbol!=null)
+    if (_symbol!=null)
        System.symbol = temp;
     postDraw();
   }
@@ -756,23 +756,23 @@ Symbol newSymbol() {
 
 class Mark extends Graphic {
   float x,y,w,h;
-  Symbol symbol;
+  Symbol _symbol;
   
   Mark(float a, float b, float c, float d) {
     x=a; y=b; w=c; h=d;
   }
   
   Mark symbol(float[] v) {
-    if (symbol==null)
-      symbol = newSymbol();
-    symbol.vertices = v;
+    if (_symbol==null)
+      _symbol = newSymbol();
+    _symbol.vertices = v;
     return this;
   }
   
   Mark symbolMode(int m) {
-    if (symbol==null)
-      symbol = newSymbol();
-    symbol.mode = m;
+    if (_symbol==null)
+      _symbol = newSymbol();
+    _symbol.mode = m;
     return this;
   }
   
@@ -782,16 +782,16 @@ class Mark extends Graphic {
       System.symbol = newSymbol();
     Symbol temp=null;
     preDraw();
-    if (symbol!=null) {
+    if (_symbol!=null) {
       temp = System.symbol;
-      System.symbol = symbol;
+      System.symbol = _symbol;
     }
     float[] coords = System.symbol.vertices;
     beginShape();
     for (int i=0;i<coords.length/2;i++)
       vertex(x+coords[i*2]*System.strokeWidth*w,y+coords[i*2+1]*System.strokeWidth*h);
     endShape(CLOSE);
-    if (symbol!=null)
+    if (_symbol!=null)
        System.symbol = temp;
     postDraw();
   }
